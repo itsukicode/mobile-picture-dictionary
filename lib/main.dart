@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'like.dart';
 import 'search-btn.dart';
 import 'nav.dart';
 
@@ -41,20 +42,6 @@ class HomeScreen extends StatelessWidget {
           ],
         ),
       ),
-    );
-  }
-}
-
-class LikeScreen extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Like'),
-        centerTitle: true,
-        backgroundColor: Colors.pink[100],
-      ),
-      body: Center(),
     );
   }
 }
