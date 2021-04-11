@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'search-btn.dart';
 
 void main() => runApp(MyApp());
 
@@ -77,9 +78,7 @@ class HomeScreen extends StatelessWidget {
         padding: EdgeInsets.all(20),
         child: Column(
           children: [
-            Center(
-              child: Text('Add Search Bar'),
-            ),
+            Center(child: SearchButton()),
             Center(
               child: Text('Definition'),
             ),
