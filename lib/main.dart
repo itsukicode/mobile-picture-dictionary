@@ -33,12 +33,6 @@ class HomeScreen extends StatelessWidget {
         child: Column(
           children: [
             Center(child: SearchButton()),
-            Center(
-              child: Text('Definition'),
-            ),
-            Center(
-              child: Text('Picture'),
-            ),
           ],
         ),
       ),
