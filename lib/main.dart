@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'like.dart';
-import 'search-btn.dart';
+import 'search_word_pic.dart';
 import 'nav.dart';
 
 void main() => runApp(MyApp());
@@ -30,11 +30,7 @@ class HomeScreen extends StatelessWidget {
       endDrawer: NavigationBar(),
       body: Container(
         padding: EdgeInsets.all(20),
-        child: Column(
-          children: [
-            Center(child: SearchButton()),
-          ],
-        ),
+        child: Center(child: SearchWordPic()),
       ),
     );
   }
