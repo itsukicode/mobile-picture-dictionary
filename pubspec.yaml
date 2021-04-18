@@ -24,7 +24,8 @@ dependencies:
   flutter:
     sdk: flutter
   pixabay_picker: ^1.0.4
-
+  dio: ^4.0.0
+  audioplayers: ^0.18.3
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

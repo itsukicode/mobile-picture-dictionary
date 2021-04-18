@@ -29,8 +29,8 @@ class HomeScreen extends StatelessWidget {
       ),
       endDrawer: NavigationBar(),
       body: Container(
-        padding: EdgeInsets.all(20),
-        child: Center(child: SearchWordPic()),
+        padding: EdgeInsets.all(25),
+        child: SearchWordPic(),
       ),
     );
   }
