@@ -4,6 +4,7 @@ import 'package:pixabay_picker/pixabay_picker.dart';
 import 'api_key.dart';
 import 'package:dio/dio.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:like_button/like_button.dart';
 
 class SearchWordPic extends StatefulWidget {
   @override
@@ -106,6 +107,15 @@ class _SearchWordPicState extends State<SearchWordPic> {
         .map((url) => Container(
               width: 100,
               height: 100,
+              child: Stack(
+                children: [
+                  Positioned(
+                    bottom: 10,
+                    right: 10,
+                    child: LikeButton(),
+                  ),
+                ],
+              ),
               decoration: BoxDecoration(
                 image:
                     DecorationImage(fit: BoxFit.fill, image: NetworkImage(url)),
