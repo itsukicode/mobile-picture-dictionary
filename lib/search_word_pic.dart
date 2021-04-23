@@ -5,6 +5,7 @@ import 'api_key.dart';
 import 'package:dio/dio.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:like_button/like_button.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class SearchWordPic extends StatefulWidget {
   @override
@@ -17,6 +18,8 @@ class _SearchWordPicState extends State<SearchWordPic> {
   String definition = '';
   String audioURL = '';
   bool isOpen = true;
+  bool isPressed = false;
+
   final Widget emptyWidget = new Container(width: 0, height: 0);
 
   // Create a text controller and use it to retrieve the current value
@@ -112,8 +115,32 @@ class _SearchWordPicState extends State<SearchWordPic> {
                   Positioned(
                     bottom: 10,
                     right: 10,
-                    child: LikeButton(),
-                  ),
+                    // child: LikeButton(
+                    //   onTap: onLikeButtonTapped(),
+                    // ),
+                    child: IconButton(
+                        icon: Icon(
+                          Icons.favorite,
+                          color: isPressed ? Colors.red[700] : Colors.grey[400],
+                          size: 40,
+                        ),
+                        onPressed: () {
+                          CollectionReference images =
+                              FirebaseFirestore.instance.collection('images');
+                          images.doc(searchWord).set({
+                            "word": searchWord,
+                            "def": definition,
+                            "audio": audioURL,
+                            "imageURL": [url],
+                          });
+                          print(url);
+                          // int index = picUrlList.indexOf(url);
+                          // print(index);
+                          // setState(() {
+                          //   isPressed = !isPressed;
+                          // });
+                        }),
+                  )
                 ],
               ),
               decoration: BoxDecoration(

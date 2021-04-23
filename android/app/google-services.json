@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "923715372390",
+    "project_id": "picture-dictionary-371ae",
+    "storage_bucket": "picture-dictionary-371ae.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:923715372390:android:b6d4ab405d03b2caef74a7",
+        "android_client_info": {
+          "package_name": "com.example.picture_dictionary"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "923715372390-k0bmr5rdeqottq3sng5t27tqfmrikmcf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBukZDWXk6T5vRHkQj1cXrujaDivYpPCss"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "923715372390-k0bmr5rdeqottq3sng5t27tqfmrikmcf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
