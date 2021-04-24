@@ -4,7 +4,6 @@ import 'package:pixabay_picker/pixabay_picker.dart';
 import 'api_key.dart';
 import 'package:dio/dio.dart';
 import 'package:audioplayers/audioplayers.dart';
-import 'package:like_button/like_button.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class SearchWordPic extends StatefulWidget {
@@ -127,13 +126,38 @@ class _SearchWordPicState extends State<SearchWordPic> {
                         onPressed: () {
                           CollectionReference images =
                               FirebaseFirestore.instance.collection('images');
-                          images.doc(searchWord).set({
-                            "word": searchWord,
-                            "def": definition,
-                            "audio": audioURL,
-                            "imageURL": [url],
-                          });
-                          print(url);
+                          var docRef = images.doc(searchWord);
+                          docRef.get().then((doc) => {
+                                if (doc.exists)
+                                  {
+                                    // User pressed Like btn
+                                    // Determine true(btn turns to  red) or false(btn truns to grey)
+                                    // If red ==> Add it
+                                    // If there is no word exsisted on firebase
+                                    // Go else statement add it as new word
+                                    // If there exist, update imageURL array
+
+                                    // If false ==> Remove it
+                                    // Remove the image from array
+                                    // Then, check the length of array.
+                                    // If it becomes to zero, delete the word from firebase
+                                    // Otherwise, do nothing
+
+                                    docRef.update({
+                                      "imageURL": FieldValue.arrayUnion([url])
+                                      // "imageURL": FieldValue.arrayRemove([url])
+                                    }),
+                                  }
+                                else
+                                  {
+                                    images.doc(searchWord).set({
+                                      "word": searchWord,
+                                      "def": definition,
+                                      "audio": audioURL,
+                                      "imageURL": [url],
+                                    }),
+                                  }
+                              });
                           // int index = picUrlList.indexOf(url);
                           // print(index);
                           // setState(() {
