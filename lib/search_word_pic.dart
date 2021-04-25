@@ -5,6 +5,7 @@ import 'api_key.dart';
 import 'package:dio/dio.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'picture.dart';
 
 class SearchWordPic extends StatefulWidget {
   @override
@@ -12,7 +13,7 @@ class SearchWordPic extends StatefulWidget {
 }
 
 class _SearchWordPicState extends State<SearchWordPic> {
-  List<String> picUrlList = [];
+  List<Picture> picList = [];
   String searchWord = '';
   String definition = '';
   String audioURL = '';
@@ -39,7 +40,7 @@ class _SearchWordPicState extends State<SearchWordPic> {
       res.hits.forEach((f) {
         setState(() {
           print(f.getDownloadLink());
-          picUrlList.add(f.getDownloadLink());
+          picList.add(new Picture(url: f.getDownloadLink(), isSaved: false));
         });
       });
     }
@@ -96,7 +97,7 @@ class _SearchWordPicState extends State<SearchWordPic> {
                   color: Colors.indigo[900],
                 ),
                 onPressed: () => {
-                      picUrlList.clear(),
+                      picList.clear(),
                       getImage(myController.text),
                       getDef(myController.text)
                     }),
@@ -105,8 +106,8 @@ class _SearchWordPicState extends State<SearchWordPic> {
   }
 
   List<Widget> _pictures() {
-    return picUrlList
-        .map((url) => Container(
+    return picList
+        .map((pic) => Container(
               width: 100,
               height: 100,
               child: Stack(
@@ -114,62 +115,77 @@ class _SearchWordPicState extends State<SearchWordPic> {
                   Positioned(
                     bottom: 10,
                     right: 10,
-                    // child: LikeButton(
-                    //   onTap: onLikeButtonTapped(),
-                    // ),
                     child: IconButton(
                         icon: Icon(
                           Icons.favorite,
-                          color: isPressed ? Colors.red[700] : Colors.grey[400],
+                          color:
+                              pic.isSaved ? Colors.red[700] : Colors.grey[400],
                           size: 40,
                         ),
                         onPressed: () {
+                          setState(() {
+                            pic.isSaved = !pic.isSaved;
+                          });
                           CollectionReference images =
                               FirebaseFirestore.instance.collection('images');
                           var docRef = images.doc(searchWord);
                           docRef.get().then((doc) => {
-                                if (doc.exists)
+                                if (pic.isSaved)
                                   {
-                                    // User pressed Like btn
-                                    // Determine true(btn turns to  red) or false(btn truns to grey)
-                                    // If red ==> Add it
-                                    // If there is no word exsisted on firebase
-                                    // Go else statement add it as new word
-                                    // If there exist, update imageURL array
-
+                                    if (doc.exists)
+                                      {
+                                        print(doc["imageURL"].length),
+                                        // User pressed Like btn
+                                        // Determine true(btn turns to  red) or false(btn truns to grey)
+                                        // If red ==> Add it
+                                        // If there is no word exsisted on firebase
+                                        // Go else statement add it as new word
+                                        // If there exist, update imageURL array
+                                        print("you got ${doc["imageURL"]}"),
+                                        docRef.update({
+                                          "imageURL":
+                                              FieldValue.arrayUnion([pic.url])
+                                        }),
+                                      }
+                                    else
+                                      {
+                                        images.doc(searchWord).set({
+                                          "word": searchWord,
+                                          "def": definition,
+                                          "audio": audioURL,
+                                          "imageURL": [pic.url],
+                                        }),
+                                      }
+                                  }
+                                else
+                                  {
                                     // If false ==> Remove it
                                     // Remove the image from array
                                     // Then, check the length of array.
                                     // If it becomes to zero, delete the word from firebase
                                     // Otherwise, do nothing
-
+                                    //  "imageURL": FieldValue.arrayRemove([url])
+                                    //
                                     docRef.update({
-                                      "imageURL": FieldValue.arrayUnion([url])
-                                      // "imageURL": FieldValue.arrayRemove([url])
+                                      "imageURL":
+                                          FieldValue.arrayRemove([pic.url])
                                     }),
-                                  }
-                                else
-                                  {
-                                    images.doc(searchWord).set({
-                                      "word": searchWord,
-                                      "def": definition,
-                                      "audio": audioURL,
-                                      "imageURL": [url],
-                                    }),
+                                    if (doc["imageURL"].length - 1 == 0)
+                                      {
+                                        docRef.delete().then(
+                                              (res) => print(
+                                                  "Document successfully deleted!"),
+                                            )
+                                      }
                                   }
                               });
-                          // int index = picUrlList.indexOf(url);
-                          // print(index);
-                          // setState(() {
-                          //   isPressed = !isPressed;
-                          // });
                         }),
                   )
                 ],
               ),
               decoration: BoxDecoration(
-                image:
-                    DecorationImage(fit: BoxFit.fill, image: NetworkImage(url)),
+                image: DecorationImage(
+                    fit: BoxFit.fill, image: NetworkImage(pic.url)),
                 borderRadius: BorderRadius.circular(40),
               ),
               margin: EdgeInsets.all(5),
