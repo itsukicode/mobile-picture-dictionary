@@ -10,12 +10,12 @@ class LikeScreen extends StatefulWidget {
 
 class _LikeScreenState extends State<LikeScreen> {
   final Widget emptyWidget = new Container(width: 0, height: 0);
+  List<Word> wordList = [];
 
   void playAudio(String audioURL) async {
     print(audioURL);
     AudioPlayer audioPlayer = AudioPlayer();
     int result = await audioPlayer.play(audioURL);
-    print(result);
     if (result == 1) {
       print('success audio');
     } else {
@@ -23,7 +23,7 @@ class _LikeScreenState extends State<LikeScreen> {
     }
   }
 
-  Widget _buildWordAndAudio(String word, String audio) {
+  Widget _buildWordAndAudio(Word word) {
     return Container(
       padding: EdgeInsets.only(left: 8.0),
       margin: EdgeInsets.only(bottom: 5.0),
@@ -32,46 +32,43 @@ class _LikeScreenState extends State<LikeScreen> {
       child: Row(
         children: [
           Text(
-            word,
+            word.word,
             style: TextStyle(fontSize: 28),
           ),
           IconButton(
               icon: Icon(Icons.volume_up),
               onPressed: () {
-                playAudio(audio);
+                playAudio(word.audioURL);
               }),
           IconButton(
               icon: Icon(Icons.book),
               onPressed: () {
-                // setState(() {
-                //   isOpen = !isOpen;
-                // });
+                setState(() {
+                  word.isPressed = !word.isPressed;
+                });
               }),
         ],
       ),
     );
   }
 
-  // Widget _buildDef() {
-  //   return Text(
-  //     definition,
-  //     style: TextStyle(fontSize: 18),
-  //   );
-  // }
+  Widget _buildDef(Word word) {
+    return Text(
+      word.def,
+      style: TextStyle(fontSize: 18),
+    );
+  }
 
-  // Widget _buildDefBox() {
-  //   return Container(
-  //     padding: EdgeInsets.all(10),
-  //     child: Column(
-  //       children: [_buildWordAndAudio(), isOpen ? _buildDef() : emptyWidget],
-  //     ),
-  //   );
-  // }
-
-  void printURL(List<DocumentSnapshot> w) {
-    w.forEach((word) {
-      print(word['imageURL'][0]);
-    });
+  Widget _buildDefBox(Word word) {
+    return Container(
+      padding: EdgeInsets.all(10),
+      child: Column(
+        children: [
+          _buildWordAndAudio(word),
+          word.isPressed ? _buildDef(word) : emptyWidget
+        ],
+      ),
+    );
   }
 
   Widget _buildPicBox(List<dynamic> picURL) {
@@ -98,19 +95,34 @@ class _LikeScreenState extends State<LikeScreen> {
         .toList();
   }
 
-  List<Widget> _savedWord(List<DocumentSnapshot> words) {
-    return words
+  List<Widget> _savedWord() {
+    return wordList
         .map((w) => Container(
               margin: EdgeInsets.all(25),
               height: 220,
               child: Column(
                 children: [
-                  _buildWordAndAudio(w['word'], w['audio']),
-                  _buildPicBox(w['imageURL']),
+                  _buildDefBox(w),
+                  _buildPicBox(w.picList),
                 ],
               ),
             ))
         .toList();
+  }
+
+  void createListOfWord(List<dynamic> words) {
+    List<dynamic> picURL;
+    int size = words.length;
+    for (int i = 0; i < size; i++) {
+      picURL = words[i]["imageURL"];
+      wordList.add(new Word(
+          word: words[i]["word"],
+          def: words[i]["def"],
+          audioURL: words[i]["audio"],
+          picList: picURL,
+          isPressed: false));
+    }
+    print(wordList.length);
   }
 
   @override
@@ -125,10 +137,10 @@ class _LikeScreenState extends State<LikeScreen> {
         child: FutureBuilder(
           future: FirebaseFirestore.instance.collection('images').get(),
           builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.done) {
+            if (snapshot.hasData) {
               final List<DocumentSnapshot> words = snapshot.data.docs;
-              // printURL(words);
-              return Container(child: ListView(children: _savedWord(words)));
+              createListOfWord(words);
+              return Container(child: ListView(children: _savedWord()));
             } else {
               return CircularProgressIndicator();
             }
