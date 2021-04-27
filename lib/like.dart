@@ -12,6 +12,34 @@ class _LikeScreenState extends State<LikeScreen> {
   final Widget emptyWidget = new Container(width: 0, height: 0);
   List<Word> wordList = [];
 
+  @override
+  void initState() {
+    super.initState();
+    // Get saved word info from firebase
+    FirebaseFirestore.instance.collection('images').get().then((value) {
+      final List<DocumentSnapshot> words = value.docs;
+      createListOfWord(words);
+    }).catchError((error) {
+      print(error);
+    });
+  }
+
+  void createListOfWord(List<dynamic> words) {
+    List<dynamic> picURL;
+    int size = words.length;
+    for (int i = 0; i < size; i++) {
+      picURL = words[i]["imageURL"];
+      setState(() {
+        wordList.add(new Word(
+            word: words[i]["word"],
+            def: words[i]["def"],
+            audioURL: words[i]["audio"],
+            picList: picURL,
+            isPressed: false));
+      });
+    }
+  }
+
   void playAudio(String audioURL) async {
     print(audioURL);
     AudioPlayer audioPlayer = AudioPlayer();
@@ -25,10 +53,8 @@ class _LikeScreenState extends State<LikeScreen> {
 
   Widget _buildWordAndAudio(Word word) {
     return Container(
-      padding: EdgeInsets.only(left: 8.0),
-      margin: EdgeInsets.only(bottom: 5.0),
-      decoration: BoxDecoration(
-          border: Border(bottom: BorderSide(color: Colors.grey[300]))),
+      // padding: EdgeInsets.only(left: 0),
+      // margin: EdgeInsets.only(bottom: 5.0),
       child: Row(
         children: [
           Text(
@@ -53,15 +79,20 @@ class _LikeScreenState extends State<LikeScreen> {
   }
 
   Widget _buildDef(Word word) {
-    return Text(
-      word.def,
-      style: TextStyle(fontSize: 18),
+    return Padding(
+      padding: EdgeInsets.only(bottom: 10),
+      child: Text(
+        word.def,
+        style: TextStyle(fontSize: 18),
+      ),
     );
   }
 
   Widget _buildDefBox(Word word) {
     return Container(
-      padding: EdgeInsets.all(10),
+      margin: EdgeInsets.only(bottom: 10),
+      decoration: BoxDecoration(
+          border: Border(bottom: BorderSide(color: Colors.grey[300]))),
       child: Column(
         children: [
           _buildWordAndAudio(word),
@@ -99,7 +130,7 @@ class _LikeScreenState extends State<LikeScreen> {
     return wordList
         .map((w) => Container(
               margin: EdgeInsets.all(25),
-              height: 220,
+              height: 230,
               child: Column(
                 children: [
                   _buildDefBox(w),
@@ -110,42 +141,16 @@ class _LikeScreenState extends State<LikeScreen> {
         .toList();
   }
 
-  void createListOfWord(List<dynamic> words) {
-    List<dynamic> picURL;
-    int size = words.length;
-    for (int i = 0; i < size; i++) {
-      picURL = words[i]["imageURL"];
-      wordList.add(new Word(
-          word: words[i]["word"],
-          def: words[i]["def"],
-          audioURL: words[i]["audio"],
-          picList: picURL,
-          isPressed: false));
-    }
-    print(wordList.length);
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Like'),
         centerTitle: true,
-        backgroundColor: Colors.pink[100],
+        backgroundColor: Color.fromRGBO(5, 30, 52, 1),
       ),
       body: Center(
-        child: FutureBuilder(
-          future: FirebaseFirestore.instance.collection('images').get(),
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              final List<DocumentSnapshot> words = snapshot.data.docs;
-              createListOfWord(words);
-              return Container(child: ListView(children: _savedWord()));
-            } else {
-              return CircularProgressIndicator();
-            }
-          },
-        ),
+        child: Container(child: ListView(children: _savedWord())),
       ),
     );
   }

@@ -1,5 +1,3 @@
-import 'package:picture_dictionary/picture.dart';
-
 class Word {
   List<dynamic> picList = [];
   String word = '';

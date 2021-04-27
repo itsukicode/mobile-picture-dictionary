@@ -46,7 +46,7 @@ class HomeScreen extends StatelessWidget {
         appBar: AppBar(
           title: Text('Picture Dictionary'),
           centerTitle: true,
-          backgroundColor: Colors.pink[100],
+          backgroundColor: Color.fromRGBO(5, 30, 52, 1),
         ),
         endDrawer: NavigationBar(),
         body: Container(

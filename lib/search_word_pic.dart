@@ -82,19 +82,20 @@ class _SearchWordPicState extends State<SearchWordPic> {
           contentPadding:
               const EdgeInsets.symmetric(vertical: 15.0, horizontal: 20),
           focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.pink[50], width: 1.5),
+            borderSide:
+                BorderSide(color: Color.fromRGBO(5, 30, 52, 1), width: 1.5),
             borderRadius: BorderRadius.circular(50),
           ),
           enabledBorder: OutlineInputBorder(
               borderSide: BorderSide(color: Colors.grey[300], width: 1.5),
               borderRadius: BorderRadius.circular(50)),
           suffixIcon: Container(
-            decoration:
-                BoxDecoration(shape: BoxShape.circle, color: Colors.pink[100]),
+            decoration: BoxDecoration(
+                shape: BoxShape.circle, color: Color.fromRGBO(5, 30, 52, 1)),
             child: IconButton(
                 icon: Icon(
                   Icons.search_rounded,
-                  color: Colors.indigo[900],
+                  color: Colors.white,
                 ),
                 onPressed: () => {
                       picList.clear(),
@@ -226,15 +227,21 @@ class _SearchWordPicState extends State<SearchWordPic> {
   }
 
   Widget _buildDef() {
-    return Text(
-      definition,
-      style: TextStyle(fontSize: 18),
+    return Padding(
+      padding: EdgeInsets.only(bottom: 10),
+      child: Text(
+        definition,
+        style: TextStyle(fontSize: 18),
+      ),
     );
   }
 
   Widget _buildDefBox() {
     return Container(
-      padding: EdgeInsets.all(10),
+      margin: EdgeInsets.fromLTRB(0, 5, 0, 10),
+      // margin: EdgeInsets.only(bottom: 10),
+      decoration: BoxDecoration(
+          border: Border(bottom: BorderSide(color: Colors.grey[300]))),
       child: Column(
         children: [_buildWordAndAudio(), isOpen ? _buildDef() : emptyWidget],
       ),
