@@ -37,12 +37,45 @@ class _SearchWordPicState extends State<SearchWordPic> {
     PixabayResponse res = await picker.api
         .requestImagesWithKeyword(keyword: keyword, resultsPerPage: 6);
     if (res != null) {
-      res.hits.forEach((f) {
-        setState(() {
-          print(f.getDownloadLink());
-          picList.add(new Picture(url: f.getDownloadLink(), isSaved: false));
-        });
-      });
+      CollectionReference images =
+          FirebaseFirestore.instance.collection('images');
+      var docRef = images.doc(keyword);
+      int count = 0;
+      int index = 0;
+      bool saved;
+      String picURL;
+      docRef.get().then((doc) => {
+            if (doc.exists)
+              {
+                res.hits.forEach((f) {
+                  saved = false;
+                  picURL = f.getDownloadLink();
+                  print("Count $count");
+                  doc["imageURL"].forEach((url) => {
+                        index = int.parse(url[url.length - 1]),
+                        print("Index $index"),
+                        if (index == count)
+                          {
+                            picURL = url.substring(0, url.length - 1),
+                            saved = true
+                          }
+                      });
+                  count++;
+                  setState(() {
+                    picList.add(new Picture(url: picURL, isSaved: saved));
+                  });
+                })
+              }
+            else
+              {
+                res.hits.forEach((f) {
+                  setState(() {
+                    picList.add(
+                        new Picture(url: f.getDownloadLink(), isSaved: false));
+                  });
+                })
+              }
+          });
     }
   }
 
@@ -127,6 +160,7 @@ class _SearchWordPicState extends State<SearchWordPic> {
                           setState(() {
                             pic.isSaved = !pic.isSaved;
                           });
+                          String index = picList.indexOf(pic).toString();
                           CollectionReference images =
                               FirebaseFirestore.instance.collection('images');
                           var docRef = images.doc(searchWord);
@@ -142,10 +176,9 @@ class _SearchWordPicState extends State<SearchWordPic> {
                                         // If there is no word exsisted on firebase
                                         // Go else statement add it as new word
                                         // If there exist, update imageURL array
-                                        print("you got ${doc["imageURL"]}"),
                                         docRef.update({
-                                          "imageURL":
-                                              FieldValue.arrayUnion([pic.url])
+                                          "imageURL": FieldValue.arrayUnion(
+                                              [pic.url + index])
                                         }),
                                       }
                                     else
@@ -154,7 +187,7 @@ class _SearchWordPicState extends State<SearchWordPic> {
                                           "word": searchWord,
                                           "def": definition,
                                           "audio": audioURL,
-                                          "imageURL": [pic.url],
+                                          "imageURL": [pic.url + index],
                                         }),
                                       }
                                   }
@@ -168,8 +201,8 @@ class _SearchWordPicState extends State<SearchWordPic> {
                                     //  "imageURL": FieldValue.arrayRemove([url])
                                     //
                                     docRef.update({
-                                      "imageURL":
-                                          FieldValue.arrayRemove([pic.url])
+                                      "imageURL": FieldValue.arrayRemove(
+                                          [pic.url + index])
                                     }),
                                     if (doc["imageURL"].length - 1 == 0)
                                       {
