@@ -1,0 +1,4 @@
+io/flutter/plugins/GeneratedPluginRegistrant.java
+ io.flutter.plugins.GeneratedPluginRegistrant
+com/example/picture_dictionary/BuildConfig.java
+ com.example.picture_dictionary.BuildConfig
