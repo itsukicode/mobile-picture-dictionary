@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "/Users/itsuki/AndroidStudioProjects/picture_dictionary/build/app/intermediates/incremental/mergeDebugResources/merged.dir/values-hy/values-hy.xml",
+            "outputFile": "/Users/itsuki/AndroidStudioProjects/picture_dictionary/picture_dictionary/build/app/intermediates/incremental/mergeDebugResources/merged.dir/values-hy/values-hy.xml",
             "map": [
                 {
                     "source": "/Users/itsuki/.gradle/caches/transforms-2/files-2.1/182d559fc8f5b90b025f205266ad0e02/jetified-play-services-base-17.0.0/res/values-hy/values.xml",
@@ -38,7 +38,7 @@
                     }
                 },
                 {
-                    "source": "/Users/itsuki/.gradle/caches/transforms-2/files-2.1/7acdfc73b59edf346d5699357cfc980e/core-1.6.0-alpha02/res/values-hy/values-hy.xml",
+                    "source": "/Users/itsuki/.gradle/caches/transforms-2/files-2.1/3f705e9081d5a276f34f8efbab207738/core-1.6.0-alpha03/res/values-hy/values-hy.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",
