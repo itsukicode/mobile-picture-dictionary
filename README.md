@@ -1,16 +1,25 @@
-# picture_dictionary
+# Mobile Picture Dictionary
+This is an application that you can search and save the definition of the word by a picture, which helps me to memorize English vocabulary effectively. 
 
-A new Flutter project.
+![mobile-picture-dictionary-demo](https://user-images.githubusercontent.com/48965717/130692765-51863ee8-8787-4eca-9167-d865e27535f9.gif)
 
-## Getting Started
+## Running it locally 
+```
+1. Download picture_dictionary.apk　
+2. Open Android Emulator
+3. Drag and drop the file you downloaded onto the Emulator　
+```
 
-This project is a starting point for a Flutter application.
+## Stack
 
-A few resources to get you started if this is your first Flutter project:
+- [Flutter](https://flutter.dev/)
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+## License
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+[MIT](https://choosealicense.com/licenses/mit/)
+
+## Author
+
+Itsuki Tomizawa
+
+
