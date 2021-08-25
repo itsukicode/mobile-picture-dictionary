@@ -1,5 +1,6 @@
 # Mobile Picture Dictionary
-This is an application that you can search and save the definition of the word by a picture, which helps me to memorize English vocabulary effectively. 
+This is an application that you can search and save the definition of the word by a picture, which helps me to memorize English vocabulary effectively.\
+This is mobile version of [picture dictionary](https://github.com/tommytommychopper/picture-dictionary) that I created previously. 
 
 ![mobile-picture-dictionary-demo](https://user-images.githubusercontent.com/48965717/130692765-51863ee8-8787-4eca-9167-d865e27535f9.gif)
 
